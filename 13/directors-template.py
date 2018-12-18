@@ -1,5 +1,5 @@
 import csv
-from collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple, Counter
 
 MOVIE_DATA = 'movie_metadata.csv'
 NUM_TOP_DIRECTORS = 20
@@ -13,7 +13,7 @@ def get_movies_by_director():
     '''Extracts all movies from csv and stores them in a dictionary
     where keys are directors, and values is a list of movies (named tuples)'''
     directors = defaultdict(list)
-    with open(MOVIE_DATA) as file:
+    with open(MOVIE_DATA, encoding='utf8') as file:
         for line in csv.DictReader(file):
             try:
                 director = line['director_name']
@@ -23,15 +23,21 @@ def get_movies_by_director():
             except ValueError:
                 continue
 
-            m = Movie(title, year, score)
-            directors[director].append(m)
+            movie = Movie(title, year, score)
+            directors[director].append(movie)
 
     return directors
 
 
 def get_average_scores(directors):
-    '''Filter directors with < MIN_MOVIES and calculate averge score'''
-    pass
+    '''Filter directors with < MIN_MOVIES and calculate average score'''
+    print(len(directors))
+    counter = Counter()
+    for director, movies in directors.items():
+        counter[director] += len(movies)
+    filtered_directors = {k: counter[k] for k in counter if counter[k] >= MIN_MOVIES}
+    print(len(filtered_directors))
+    return directors
 
 
 def _calc_mean(movies):
