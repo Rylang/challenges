@@ -31,14 +31,21 @@ def get_movies_by_director():
 
 def get_average_scores(directors):
     '''Filter directors with < MIN_MOVIES and calculate average score'''
-    filtered_directors = {director: movie for director, movie in directors.items() if len(movie) > MIN_MOVIES}
+    filtered_directors = {director: movies for director, movies in directors.items() if len(movies) > MIN_MOVIES}
 
-    return
+    counter = Counter()
+    for director, movies in directors.items():
+        counter[director] += _calc_mean(movies)
+
+    return filtered_directors
 
 
 def _calc_mean(movies):
     '''Helper method to calculate mean of list of Movie namedtuples'''
-    pass
+    counter = Counter()
+    for movie in movies:
+        counter +=
+
 
 
 def print_results(directors):
